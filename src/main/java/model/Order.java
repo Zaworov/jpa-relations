@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.*;
 
 @Entity
@@ -12,8 +13,8 @@ public class Order implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id_order")
     private Long id;
-    @Column(nullable = false)
-    private String product;
+    @ManyToMany
+    private List<Product> products;
     @Column(name = "details", length = 512)
     private String orderDetails;
     @ManyToOne
@@ -26,11 +27,11 @@ public class Order implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-    public String getProduct() {
-        return product;
+    public List<Product> getProducts() {
+        return products;
     }
-    public void setProduct(String product) {
-        this.product = product;
+    public void setProduct(List<Product> products) {
+        this.products = products;
     }
     public String getOrderDetails() {
         return orderDetails;
@@ -38,13 +39,17 @@ public class Order implements Serializable {
     public void setOrderDetails(String orderDetails) {
         this.orderDetails = orderDetails;
     }
-    @Override
-    public String toString() {
-        return "model.Order [id=" + id + ", product=" + product
-                + ", orderDetails=" + orderDetails + "]";
+    public Client getClient() {
+        return client;
     }
-
     public void setClient(Client client) {
         this.client = client;
+    }
+    @Override
+    public String toString() {
+        return "Order [id=" + id
+                + ", products=" + products
+                + ", client=" + client.getFirstName() +" "+ client.getLastName()
+                + ", orderDetails=" + orderDetails  + "]";
     }
 }
