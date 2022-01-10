@@ -1,3 +1,8 @@
+package servlet;
+
+import model.Client;
+import model.Order;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -9,8 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/addclient")
-public class AddClient extends HttpServlet {
+@WebServlet("/addorder")
+public class AddOrder extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @PersistenceUnit(name = "myPersistenceUnit")
@@ -18,16 +23,22 @@ public class AddClient extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Client client = new Client();
-        client.setFirstName(request.getParameter("firstName"));
-        client.setLastName(request.getParameter("lastName"));
-        client.setAddress(request.getParameter("address"));
-
         EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
 
+        //creating order
+        Order order = new Order();
+        order.setProduct(request.getParameter("productName"));
+        order.setOrderDetails(request.getParameter("orderDetails"));
+
+        //connecting order with client
+        long clientId = Long.parseLong(request.getParameter("clientId"));
+        Client client = em.find(Client.class, clientId);
+        order.setClient(client);
+
+        //persisting order in db
+        EntityTransaction tx = em.getTransaction();
         tx.begin();
-        em.persist(client);
+        em.persist(order);
         tx.commit();
         em.close();
 

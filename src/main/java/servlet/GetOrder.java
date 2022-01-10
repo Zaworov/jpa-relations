@@ -1,3 +1,7 @@
+package servlet;
+
+import model.Order;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
@@ -8,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/getclient")
-public class GetClient extends HttpServlet {
+@WebServlet("/getorder")
+public class GetOrder extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @PersistenceUnit(name = "myPersistenceUnit")
@@ -17,13 +21,12 @@ public class GetClient extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        long clientId = Long.parseLong(request.getParameter("clientId"));
+        long orderId = Long.parseLong(request.getParameter("orderId"));
 
         EntityManager em = emf.createEntityManager();
-        Client client = em.find(Client.class, clientId);
-        client.getOrders().size(); // we need to do some operation on collection to fetch orders, in JPA collection marked with @OneToMany annotation are "lazy"
+        Order order = em.find(Order.class, orderId);
         em.close();
 
-        response.getWriter().println(client);
+        response.getWriter().println(order);
     }
 }

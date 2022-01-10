@@ -1,3 +1,5 @@
+package model;
+
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -38,7 +40,7 @@ public class Order implements Serializable {
     }
     @Override
     public String toString() {
-        return "Order [id=" + id + ", product=" + product
+        return "model.Order [id=" + id + ", product=" + product
                 + ", orderDetails=" + orderDetails + "]";
     }
 
