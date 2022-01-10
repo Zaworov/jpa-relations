@@ -14,6 +14,10 @@ public class Order implements Serializable {
     @Column(name="id_order")
     private Long id;
     @ManyToMany
+    @JoinTable(name = "order_products",
+            joinColumns = {@JoinColumn(name="order_id", referencedColumnName="id_order")},
+            inverseJoinColumns = {@JoinColumn(name="product_id", referencedColumnName="id_product")}
+    )
     private List<Product> products;
     @Column(name = "details", length = 512)
     private String orderDetails;
